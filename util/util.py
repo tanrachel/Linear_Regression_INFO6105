@@ -1,7 +1,10 @@
 import pandas as pd
 import numpy as np
+from itertools import combinations
+from sklearn.metrics import mean_squared_error
 
 from sklearn.preprocessing import LabelEncoder
+from sklearn.linear_model import LinearRegression
 
 from sklearn.model_selection import train_test_split, cross_val_score
 from sklearn.metrics import log_loss, accuracy_score
@@ -141,3 +144,82 @@ def plot_calibration(y_true, y_prob, n_bins, model_name):
 
   plt.tight_layout()
   plt.show()
+
+
+def best_subset_selection(X, y):
+    n_features = X.shape[1]
+    best_model = None
+    best_features = None
+    best_mse = np.inf
+
+    for k in range(1, n_features + 1):
+        for subset in combinations(range(n_features), k):
+            subset = list(subset)
+            model = LinearRegression()
+            model.fit(X[:, subset], y)
+            y_pred = model.predict(X[:, subset])
+            mse = mean_squared_error(y, y_pred)
+
+            if mse < best_mse:
+                best_mse = mse
+                best_model = model
+                best_features = subset
+
+    return best_model, best_features
+
+def forward_stepwise_selection(X, y):
+    n_features = X.shape[1]
+    selected_features = []
+    best_model = None
+    best_mse = np.inf
+
+    for k in range(1, n_features + 1):
+        best_subset = None
+
+        for feature in range(n_features):
+            if feature not in selected_features:
+                current_subset = selected_features + [feature]
+                model = LinearRegression()
+                model.fit(X[:, current_subset], y)
+                y_pred = model.predict(X[:, current_subset])
+                mse = mean_squared_error(y, y_pred)
+
+                if mse < best_mse:
+                    best_mse = mse
+                    best_model = model
+                    best_subset = current_subset
+
+        if best_subset is None:
+            break
+
+        selected_features = best_subset
+
+    return best_model, selected_features
+
+def backward_stepwise_selection(X, y):
+    n_features = X.shape[1]
+    selected_features = list(range(n_features))
+    best_model = None
+    best_mse = np.inf
+
+    for k in range(1, n_features + 1):
+        best_subset = None
+
+        for feature in selected_features:
+            current_subset = [f for f in selected_features if f != feature]
+            model = LinearRegression()
+            model.fit(X[:, current_subset], y)
+            y_pred = model.predict(X[:, current_subset])
+            mse = mean_squared_error(y, y_pred)
+
+            if mse < best_mse:
+                best_mse = mse
+                best_model = model
+                best_subset = current_subset
+
+        if best_subset is None:
+            break
+
+        selected_features = best_subset
+
+    return best_model, selected_features
