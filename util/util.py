@@ -1,3 +1,22 @@
+import pandas as pd
+import numpy as np
+
+from sklearn.preprocessing import LabelEncoder
+
+from sklearn.model_selection import train_test_split, cross_val_score
+from sklearn.metrics import log_loss, accuracy_score
+from sklearn.metrics import roc_curve, roc_auc_score
+from sklearn.metrics import confusion_matrix, recall_score, precision_score
+from sklearn.preprocessing import binarize, PolynomialFeatures
+from sklearn.linear_model import LogisticRegression, RidgeClassifier
+from sklearn.calibration import calibration_curve
+
+import matplotlib.pyplot as plt
+
+import warnings
+warnings.filterwarnings("ignore")
+
+
 def encoder(dataset, catFeatures, qtyFeatures):
   dataset = dataset[catFeatures + qtyFeatures]
   dataset_encoded = pd.get_dummies(dataset,
@@ -5,6 +24,20 @@ def encoder(dataset, catFeatures, qtyFeatures):
                                    drop_first = True)
 
   return(dataset_encoded)
+
+def encoder(dataset, qtyFeatures):
+  dataset = dataset[qtyFeatures]
+  dataset_encoded = pd.get_dummies(dataset, drop_first = True)
+  return(dataset_encoded)
+
+def testprint():
+  print("testing")
+
+def extract_date_component(df):
+  df['sold_year'] = df['date'].dt.year
+  df['sold_month'] = df['date'].dt.month
+  df['sold_day'] = df['date'].dt.day
+  return df 
 
 def plot_auc_curve(model, X, y):
   try:
