@@ -1,11 +1,13 @@
 # Linear Regression with Boston Housing data
 
+## Packages 
+For our regression models, we utilized statsmodel and scikit-learn packages. 
 
 ## Preprocessing and Cleaning 
 In the exploratory phase, we discovered there are outliers and duplicates the in the data and removed them. 
 
 <p align="center">
-  <img src="assets/preprocessing.png" width="200" />
+  <img src="assets/preprocessing.png" />
 </p>
 
 ## Feature Selection & Model Selection 
@@ -20,17 +22,14 @@ For model selection, we ran through 3 models:
 Base on the RMSE from each model, Linear has the lowest RMSE. For cross validation, we used K-fold, using 5 folds on all models 
 
 <p align="center">
-  <img src="assets/featuremodel.png" width="200" />
+  <img src="assets/featuremodel.png" />
 </p>
 
 ## Results and Findings 
 
 <p align="center">
-  <img src="assets/results.png" width="200" />
+  <img src="assets/results.png"/>
 </p>
 
 Presentation Link: 
 https://docs.google.com/presentation/d/1oMFu_IfJJW_4yeX63r03aYIM-DzvNXZMDPeMJku7MPg/edit?usp=sharing 
-
-Jupyter Notebook: 
-https://github.com/tanrachel/info_6105_midterm_project/blob/main/Midterm_Project_1.ipynb
